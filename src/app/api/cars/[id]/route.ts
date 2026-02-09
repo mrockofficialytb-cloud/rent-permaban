@@ -3,9 +3,9 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(
   _req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await context.params;
+  const { id } = await params;
 
   const car = await prisma.car.findUnique({
     where: { id },
@@ -19,11 +19,9 @@ export async function GET(
   });
 
   if (!car) {
-    return NextResponse.json(
-      { error: "Vozidlo nenalezeno" },
-      { status: 404 }
-    );
+    return NextResponse.json({ error: "Vozidlo nenalezeno" }, { status: 404 });
   }
 
   return NextResponse.json({ car });
 }
+
