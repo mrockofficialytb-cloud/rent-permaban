@@ -43,7 +43,7 @@ export default function ReservationPage() {
       <h1>Rezervace vozidla</h1>
 
       <form onSubmit={submit} style={{ display: "grid", gap: 12 }}>
-        <input type="hidden" name="carId" value="cmlf8awxm0000uf88lemz5175" />
+        <input type="hidden" name="carId" value="cmlflph4r0000ufm424zmus8z" />
 
         <label>
           Od:
