@@ -4,9 +4,9 @@ import { prisma } from "@/lib/prisma";
 
 function carThumb(name: string) {
   const n = name.toLowerCase();
-  if (n.includes("california")) return "/cars/california-m.webp";
-  if (n.includes("multiva")) return "/cars/multivan-m.webp";
-  if (n.includes("caravelle")) return "/cars/grandcaliforinia-m.webp";
+  if (n.includes("california")) return "/cars/california.jpg";
+  if (n.includes("multiva")) return "/cars/multiva.jpg";
+  if (n.includes("caravelle")) return "/cars/caravelle.jpg";
   return "";
 }
 
@@ -97,5 +97,6 @@ export default async function VozidlaPage() {
     </div>
   );
 }
+
 
 
