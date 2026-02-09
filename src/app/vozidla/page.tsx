@@ -1,6 +1,4 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import Link from "next/link";
 
 type Car = {
   id: string;
@@ -8,42 +6,52 @@ type Car = {
   plate: string;
 };
 
-export default function VozidlaPage() {
-  const [cars, setCars] = useState<Car[]>([]);
-  const [loading, setLoading] = useState(true);
+async function getCars(): Promise<Car[]> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/cars`, {
+    cache: "no-store",
+  });
 
-  useEffect(() => {
-    fetch("/api/cars")
-      .then((res) => res.json())
-      .then((data) => {
-        setCars(data.cars ?? []);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
-    return <div className="p-8">Načítám vozidla…</div>;
+  if (!res.ok) {
+    throw new Error("Nepodařilo se načíst vozidla");
   }
 
-  return (
-    <div className="min-h-screen bg-zinc-100 p-8">
-      <h1 className="text-3xl font-bold mb-6">🚗 Vozidla k pronájmu</h1>
+  const data = await res.json();
+  return data.cars;
+}
 
-      <div className="grid gap-4">
+export default async function VozidlaPage() {
+  const cars = await getCars();
+
+  return (
+    <div className="min-h-screen bg-zinc-100 px-6 py-16">
+      <h1 className="mb-10 text-center text-4xl font-bold">
+        Nabídka vozidel
+      </h1>
+
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {cars.map((car) => (
           <div
             key={car.id}
-            className="rounded-xl bg-white p-6 shadow"
+            className="rounded-xl bg-white p-6 shadow-md transition hover:shadow-xl"
           >
-            <div className="text-xl font-semibold">{car.name}</div>
-            <div className="text-zinc-500">{car.plate}</div>
-            <div className="mt-4 text-sm text-green-600">
-              Aktivní
+            <div className="mb-4 h-40 w-full rounded-lg bg-zinc-200 flex items-center justify-center text-zinc-500">
+              FOTO VOZU
             </div>
+
+            <h2 className="text-xl font-semibold">{car.name}</h2>
+            <p className="text-sm text-zinc-500">SPZ: {car.plate}</p>
+
+            <Link
+              href={`/vozidla/${car.id}`}
+              className="mt-4 inline-block w-full rounded-lg bg-black py-3 text-center text-white transition hover:bg-zinc-800"
+            >
+              Zobrazit detail
+            </Link>
           </div>
         ))}
       </div>
     </div>
   );
 }
+
 
