@@ -32,11 +32,16 @@ export default function ReservationPage() {
     if (res.ok) {
       setStatus("✅ Rezervace vytvořena");
       form.reset();
-    } else {
-      const msg = await res.text();
-      setStatus("⛔ " + msg);
-    }
+   } else {
+  let message = "Chyba";
+  try {
+    const j = await res.json();
+    message = j?.error ?? message;
+  } catch {
+    message = await res.text();
   }
+  setStatus("⛔ " + message);
+}
 
   return (
     <main style={{ maxWidth: 480, margin: "40px auto", color: "white" }}>
