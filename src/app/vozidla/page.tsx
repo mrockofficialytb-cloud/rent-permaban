@@ -1,55 +1,99 @@
+import Image from "next/image";
 import Link from "next/link";
+import { prisma } from "@/lib/prisma";
 
-type Car = {
-  id: string;
-  name: string;
-  plate: string;
-};
-
-async function getCars(): Promise<Car[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/cars`, {
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    throw new Error("Nepodařilo se načíst vozidla");
-  }
-
-  const data = await res.json();
-  return data.cars;
+function carThumb(name: string) {
+  const n = name.toLowerCase();
+  if (n.includes("california")) return "/cars/california-m.webp";
+  if (n.includes("multiva")) return "/cars/multivan-m.webp";
+  if (n.includes("caravelle")) return "/cars/grandcaliforinia-m.webp";
+  return "";
 }
 
 export default async function VozidlaPage() {
-  const cars = await getCars();
+  const cars = await prisma.car.findMany({
+    where: { active: true },
+    orderBy: { createdAt: "desc" },
+    select: { id: true, name: true, plate: true },
+  });
 
   return (
-    <div className="min-h-screen bg-zinc-100 px-6 py-16">
-      <h1 className="mb-10 text-center text-4xl font-bold">
-        Nabídka vozidel
-      </h1>
-
-      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {cars.map((car) => (
-          <div
-            key={car.id}
-            className="rounded-xl bg-white p-6 shadow-md transition hover:shadow-xl"
-          >
-            <div className="mb-4 h-40 w-full rounded-lg bg-zinc-200 flex items-center justify-center text-zinc-500">
-              FOTO VOZU
-            </div>
-
-            <h2 className="text-xl font-semibold">{car.name}</h2>
-            <p className="text-sm text-zinc-500">SPZ: {car.plate}</p>
-
-            <Link
-              href={`/vozidla/${car.id}`}
-              className="mt-4 inline-block w-full rounded-lg bg-black py-3 text-center text-white transition hover:bg-zinc-800"
-            >
-              Zobrazit detail
+    <div className="min-h-screen bg-grid">
+      <header className="container pt-10">
+        <div className="flex items-center justify-between">
+          <div className="flex items-baseline gap-3">
+            <Link href="/" className="text-lg font-semibold tracking-tight">
+              RENT.PERMABAN.CZ
             </Link>
+            <div className="kicker hidden sm:block">VOZIDLA</div>
           </div>
-        ))}
-      </div>
+          <nav className="flex items-center gap-3">
+            <Link className="btn btn-ghost" href="/vozidla">Vozidla</Link>
+            <Link className="btn btn-primary" href="/rezervace">Rezervace</Link>
+          </nav>
+        </div>
+      </header>
+
+      <main className="container pb-24 pt-14">
+        <div className="flex items-end justify-between gap-6">
+          <div>
+            <div className="kicker">PŘEHLED</div>
+            <h1 className="h2 mt-3">Dostupná vozidla</h1>
+            <p className="muted mt-2">Klikni na detail nebo rovnou vytvoř rezervaci.</p>
+          </div>
+
+          <Link className="btn btn-primary hidden sm:inline-flex" href="/rezervace">
+            Přejít na rezervaci
+          </Link>
+        </div>
+
+        <section className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {cars.map((car) => {
+            const src = carThumb(car.name);
+
+            return (
+              <article key={car.id} className="card overflow-hidden">
+                <div className="relative h-44 w-full">
+                  {src ? (
+                    <Image
+                      src={src}
+                      alt={car.name}
+                      fill
+                      className="object-cover"
+                      priority={false}
+                    />
+                  ) : (
+                    <div className="h-full w-full bg-gradient-to-br from-white/10 to-transparent" />
+                  )}
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <div className="absolute bottom-4 left-5">
+                    <div className="text-base font-semibold">{car.name}</div>
+                    <div className="text-xs text-zinc-300">SPZ: {car.plate}</div>
+                  </div>
+                </div>
+
+                <div className="p-5">
+                  <div className="flex items-center justify-between gap-3">
+                    <Link className="btn btn-ghost w-full" href={`/vozidla/${car.id}`}>
+                      Detail vozidla →
+                    </Link>
+                    <Link className="btn btn-primary w-full" href={`/rezervace?carId=${car.id}`}>
+                      Rezervovat
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </section>
+
+        <div className="mt-10 sm:hidden">
+          <Link className="btn btn-primary w-full" href="/rezervace">
+            Přejít na rezervaci
+          </Link>
+        </div>
+      </main>
     </div>
   );
 }
