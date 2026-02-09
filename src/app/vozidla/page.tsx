@@ -1,36 +1,49 @@
-export const dynamic = "force-dynamic";
+"use client";
 
-async function getCars() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/cars`, {
-    cache: "no-store",
-  });
+import { useEffect, useState } from "react";
 
-  if (!res.ok) throw new Error("Nepodařilo se načíst auta");
-  return res.json();
-}
+type Car = {
+  id: string;
+  name: string;
+  plate: string;
+};
 
-export default async function VozidlaPage() {
-  const { cars } = await getCars();
+export default function VozidlaPage() {
+  const [cars, setCars] = useState<Car[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/cars")
+      .then((res) => res.json())
+      .then((data) => {
+        setCars(data.cars ?? []);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <div className="p-8">Načítám vozidla…</div>;
+  }
 
   return (
-    <main className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Dostupná vozidla</h1>
+    <div className="min-h-screen bg-zinc-100 p-8">
+      <h1 className="text-3xl font-bold mb-6">🚗 Vozidla k pronájmu</h1>
 
-      <ul className="space-y-3">
-        {cars.map((car: any) => (
-          <li key={car.id} className="border p-4 rounded">
-            <div className="font-semibold">{car.name}</div>
-            <div className="text-sm text-gray-500">{car.plate}</div>
-
-            <a
-              href={`/vozidla/${car.id}`}
-              className="text-blue-600 underline mt-2 inline-block"
-            >
-              Rezervovat
-            </a>
-          </li>
+      <div className="grid gap-4">
+        {cars.map((car) => (
+          <div
+            key={car.id}
+            className="rounded-xl bg-white p-6 shadow"
+          >
+            <div className="text-xl font-semibold">{car.name}</div>
+            <div className="text-zinc-500">{car.plate}</div>
+            <div className="mt-4 text-sm text-green-600">
+              Aktivní
+            </div>
+          </div>
         ))}
-      </ul>
-    </main>
+      </div>
+    </div>
   );
 }
+

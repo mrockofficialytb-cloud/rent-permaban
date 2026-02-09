@@ -1,14 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(
-  _req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  _req: Request,
+  { params }: { params: { id: string } }
 ) {
-  const { id } = await params;
-
   const car = await prisma.car.findUnique({
-    where: { id },
+    where: { id: params.id },
     select: {
       id: true,
       name: true,
@@ -19,7 +17,10 @@ export async function GET(
   });
 
   if (!car) {
-    return NextResponse.json({ error: "Vozidlo nenalezeno" }, { status: 404 });
+    return NextResponse.json(
+      { error: "Vozidlo nenalezeno" },
+      { status: 404 }
+    );
   }
 
   return NextResponse.json({ car });
