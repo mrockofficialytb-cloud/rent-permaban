@@ -4,9 +4,9 @@ import { prisma } from "@/lib/prisma";
 
 function carThumb(name: string) {
   const n = name.toLowerCase();
-  if (n.includes("california")) return "/cars/california.jpg";
-  if (n.includes("multiva")) return "/cars/multiva.jpg";
-  if (n.includes("caravelle")) return "/cars/caravelle.jpg";
+  if (n.includes("california")) return "/cars/california.webp";
+  if (n.includes("multiva")) return "/cars/multivan.webp";
+  if (n.includes("caravelle")) return "/cars/grandcalifornia.webp";
   return "";
 }
 
@@ -21,10 +21,7 @@ export default async function VozidlaPage() {
     <div className="min-h-screen bg-grid">
       <header className="container pt-10">
         <div className="flex items-center justify-between">
-          <div className="flex items-baseline gap-3">
-            <Link href="/" className="text-lg font-semibold tracking-tight">
-              RENT.PERMABAN.CZ
-            </Link>
+          <div className="flex items-baseline gap-3">    
             <div className="kicker hidden sm:block">VOZIDLA</div>
           </div>
           <nav className="flex items-center gap-3">
@@ -38,8 +35,7 @@ export default async function VozidlaPage() {
         <div className="flex items-end justify-between gap-6">
           <div>
             <div className="kicker">PŘEHLED</div>
-            <h1 className="h2 mt-3">Dostupná vozidla</h1>
-            <p className="muted mt-2">Klikni na detail nebo rovnou vytvoř rezervaci.</p>
+            <h1 className="h2 mt-3">Vozidla v nabídce</h1>         
           </div>
 
           <Link className="btn btn-primary hidden sm:inline-flex" href="/rezervace">
@@ -76,7 +72,7 @@ export default async function VozidlaPage() {
                 <div className="p-5">
                   <div className="flex items-center justify-between gap-3">
                     <Link className="btn btn-ghost w-full" href={`/vozidla/${car.id}`}>
-                      Detail vozidla →
+                      Detail vozidla
                     </Link>
                     <Link className="btn btn-primary w-full" href={`/rezervace?carId=${car.id}`}>
                       Rezervovat
