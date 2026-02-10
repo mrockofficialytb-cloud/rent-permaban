@@ -1,38 +1,37 @@
-@import "tailwindcss";
-
-:root {
-  --bg: #f4f4f4;
-  --card: #ffffff;
-  --text: #111111;
-  --muted: #6b7280;
-  --border: rgba(17, 17, 17, 0.10);
+/* layout */
+.container{
+  width: min(1120px, calc(100% - 48px));
+  margin-inline: auto;
 }
 
-html, body {
-  height: 100%;
+.bg-grid{
+  background:
+    radial-gradient(circle at 1px 1px, rgba(17,17,17,.08) 1px, transparent 0) 0 0/22px 22px,
+    var(--bg);
 }
 
-body {
-  background: var(--bg);
-  color: var(--text);
+/* typografie */
+.kicker{
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
 }
 
-/* jemná „dealer“ linka nahoře */
-.topline {
-  height: 4px;
-  background: linear-gradient(90deg, #e31b23 0%, #111 50%, #e31b23 100%);
+.h2{
+  font-size: 34px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-weight: 800;
 }
 
-/* hezké karty */
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  box-shadow: 0 8px 30px rgba(0,0,0,.06);
-}
+/* "muted" text a border helper (když je používáš v Tailwind třídách) */
+.text-muted-foreground{ color: var(--muted); }
+.bg-border\/60{ background: rgba(17,17,17,.10); } /* fallback když to někde používáš */
 
-/* tlačítka */
-.btn {
+/* buttons – sladit s tím, co používáš v JSX */
+.btn{
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -40,16 +39,43 @@ body {
   height: 44px;
   padding: 0 18px;
   border-radius: 999px;
-  font-weight: 600;
+  font-weight: 700;
   border: 1px solid var(--border);
   background: #111;
   color: #fff;
-  transition: transform .08s ease, opacity .15s ease;
+  transition: transform .08s ease, opacity .15s ease, box-shadow .15s ease;
+  box-shadow: 0 10px 26px rgba(0,0,0,.10);
 }
-.btn:hover { opacity: .92; }
-.btn:active { transform: translateY(1px); }
+.btn:hover{ opacity: .92; }
+.btn:active{ transform: translateY(1px); }
 
-.btn-secondary {
-  background: #fff;
+/* aliasy dle tvého JSX */
+.btn-primary{
+  background: #111;
+  color: #fff;
+  border-color: rgba(17,17,17,.15);
+}
+
+.btn-ghost{
+  background: rgba(255,255,255,.8);
   color: #111;
+  border-color: rgba(17,17,17,.12);
+  box-shadow: 0 8px 22px rgba(0,0,0,.06);
+}
+.btn-ghost:hover{
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(0,0,0,.10);
+}
+
+/* cards – jemnější + lepší hover */
+.card{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.06);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 16px 44px rgba(0,0,0,.10);
 }
