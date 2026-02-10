@@ -64,8 +64,14 @@ export default async function VozidlaPage() {
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                   <div className="absolute bottom-4 left-5">
-                    <div className="text-base font-semibold">{car.name}</div>
-                    <div className="text-xs text-zinc-300">SPZ: {car.plate}</div>
+                   <div className="absolute bottom-4 left-5 text-white">
+  <div className="text-base font-semibold text-shadow">
+    {car.name}
+  </div>
+
+  <div className="mt-1 inline-flex items-center rounded-full border border-white/25 bg-white/15 px-3 py-1 text-xs backdrop-blur">
+    SPZ: <span className="ml-1 font-semibold">{car.plate}</span>
+  </div>
                   </div>
                 </div>
 

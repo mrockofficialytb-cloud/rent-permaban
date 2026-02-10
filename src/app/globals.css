@@ -53,3 +53,6 @@ body {
   background: #fff;
   color: #111;
 }
+.text-shadow {
+  text-shadow: 0 2px 10px rgba(0,0,0,.45);
+}
