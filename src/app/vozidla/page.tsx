@@ -4,9 +4,12 @@ import { prisma } from "@/lib/prisma";
 
 function carThumb(name: string) {
   const n = name.toLowerCase();
+
+  // názvy dle tvých souborů v /public/cars
+  if (n.includes("grand") && n.includes("california")) return "/cars/grandcalifornia.webp";
   if (n.includes("california")) return "/cars/california.webp";
-  if (n.includes("multiva")) return "/cars/multivan.webp";
-  if (n.includes("caravelle")) return "/cars/grandcalifornia.webp";
+  if (n.includes("multiva")) return "/cars/multiva.webp";
+  if (n.includes("caravelle")) return "/cars/caravelle.webp"; // pokud nemáš, smaž řádek
   return "";
 }
 
@@ -21,12 +24,17 @@ export default async function VozidlaPage() {
     <div className="min-h-screen bg-grid">
       <header className="container pt-10">
         <div className="flex items-center justify-between">
-          <div className="flex items-baseline gap-3">    
+          <div className="flex items-baseline gap-3">
             <div className="kicker hidden sm:block">VOZIDLA</div>
           </div>
+
           <nav className="flex items-center gap-3">
-            <Link className="btn btn-ghost" href="/vozidla">Vozidla</Link>
-            <Link className="btn btn-primary" href="/rezervace">Rezervace</Link>
+            <Link className="btn btn-ghost" href="/vozidla">
+              Vozidla
+            </Link>
+            <Link className="btn btn-primary" href="/rezervace">
+              Rezervace
+            </Link>
           </nav>
         </div>
       </header>
@@ -35,7 +43,7 @@ export default async function VozidlaPage() {
         <div className="flex items-end justify-between gap-6">
           <div>
             <div className="kicker">PŘEHLED</div>
-            <h1 className="h2 mt-3">Vozidla v nabídce</h1>         
+            <h1 className="h2 mt-3">Vozidla v nabídce</h1>
           </div>
 
           <Link className="btn btn-primary hidden sm:inline-flex" href="/rezervace">
@@ -63,15 +71,16 @@ export default async function VozidlaPage() {
                   )}
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                  <div className="absolute bottom-4 left-5">
-                   <div className="absolute bottom-4 left-5 text-white">
-  <div className="text-base font-semibold text-shadow">
-    {car.name}
-  </div>
 
-  <div className="mt-1 inline-flex items-center rounded-full border border-white/25 bg-white/15 px-3 py-1 text-xs backdrop-blur">
-    SPZ: <span className="ml-1 font-semibold">{car.plate}</span>
-  </div>
+                  {/* ✅ TADY byl průser – teď je to správně zavřené */}
+                  <div className="absolute bottom-4 left-5 text-white">
+                    <div className="text-base font-semibold text-shadow">
+                      {car.name}
+                    </div>
+
+                    <div className="mt-1 inline-flex items-center rounded-full border border-white/25 bg-white/15 px-3 py-1 text-xs backdrop-blur">
+                      SPZ: <span className="ml-1 font-semibold">{car.plate}</span>
+                    </div>
                   </div>
                 </div>
 
