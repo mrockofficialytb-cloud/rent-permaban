@@ -7,8 +7,8 @@ function carThumb(name: string) {
 
   // názvy dle tvých souborů v /public/cars
   if (n.includes("grand") && n.includes("california")) return "/cars/grandcalifornia.webp";
-  if (n.includes("california")) return "/cars/california.webp";
-  if (n.includes("multiva")) return "/cars/multiva.webp";
+  if (n.includes("california")) return "/cars/california-m.webp";
+  if (n.includes("multiva")) return "/cars/multivan-m.webp";
   return "";
 }
 
@@ -21,29 +21,7 @@ export default async function VozidlaPage() {
 
   return (
     <div className="min-h-screen bg-grid">
-      <header className="container pt-10">
-        <div className="flex items-center justify-between">
-          <div className="flex items-baseline gap-3">
-            <div className="kicker hidden sm:block">VOZIDLA</div>
-          </div>
-
-          <nav className="flex items-center gap-3">
-            <Link className="btn btn-ghost" href="/vozidla">
-              Vozidla
-            </Link>
-            <Link className="btn btn-primary" href="/rezervace">
-              Rezervace
-            </Link>
-          </nav>
-        </div>
-      </header>
-
-      <main className="container pb-24 pt-14">
-        <div className="flex items-end justify-between gap-6">
-          <div>
-            <div className="kicker">PŘEHLED</div>
-            <h1 className="h2 mt-3">Vozidla v nabídce</h1>
-          </div>
+      <main className="container pb-24 pt-20">
 
           <Link className="btn btn-primary hidden sm:inline-flex" href="/rezervace">
             Přejít na rezervaci
