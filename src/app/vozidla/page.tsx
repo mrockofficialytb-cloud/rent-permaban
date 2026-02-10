@@ -4,8 +4,8 @@ import { prisma } from "@/lib/prisma";
 
 function carThumb(name: string) {
   const n = name.toLowerCase();
-  if (n.includes("california")) return "/cars/california-m.webp";
-  if (n.includes("multiva")) return "/cars/multivan-m.webp";
+  if (n.includes("california")) return "/cars/california.webp";
+  if (n.includes("multiva")) return "/cars/multivan.webp";
   if (n.includes("caravelle")) return "/cars/grandcalifornia.webp";
   return "";
 }
@@ -19,51 +19,68 @@ export default async function VozidlaPage() {
 
   return (
     <div className="min-h-screen bg-grid">
-      <main className="container pb-24 pt-16">
-        <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <header className="container pt-10">
+        <div className="flex items-center justify-between">
+          <div className="flex items-baseline gap-3">    
+            <div className="kicker hidden sm:block">VOZIDLA</div>
+          </div>
+          <nav className="flex items-center gap-3">
+            <Link className="btn btn-ghost" href="/vozidla">Vozidla</Link>
+            <Link className="btn btn-primary" href="/rezervace">Rezervace</Link>
+          </nav>
+        </div>
+      </header>
+
+      <main className="container pb-24 pt-14">
+        <div className="flex items-end justify-between gap-6">
+          <div>
+            <div className="kicker">PŘEHLED</div>
+            <h1 className="h2 mt-3">Vozidla v nabídce</h1>         
+          </div>
+
+          <Link className="btn btn-primary hidden sm:inline-flex" href="/rezervace">
+            Přejít na rezervaci
+          </Link>
+        </div>
+
+        <section className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {cars.map((car) => {
             const src = carThumb(car.name);
 
             return (
-              <article
-                key={car.id}
-                className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur"
-              >
-                <div className="relative h-52 w-full">
+              <article key={car.id} className="card overflow-hidden">
+                <div className="relative h-44 w-full">
                   {src ? (
                     <Image
                       src={src}
                       alt={car.name}
                       fill
                       className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 33vw"
+                      priority={false}
                     />
                   ) : (
                     <div className="h-full w-full bg-gradient-to-br from-white/10 to-transparent" />
                   )}
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <div className="absolute bottom-4 left-5">
+                   <div className="absolute bottom-4 left-5 text-white">
+  <div className="text-base font-semibold text-shadow">
+    {car.name}
+  </div>
 
-                  <div className="absolute bottom-4 left-5 right-5 text-white">
-                    <div className="text-base font-semibold">{car.name}</div>
-                    <div className="mt-2 inline-flex items-center rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs backdrop-blur">
-                      SPZ: <span className="ml-1 font-semibold">{car.plate}</span>
-                    </div>
+  <div className="mt-1 inline-flex items-center rounded-full border border-white/25 bg-white/15 px-3 py-1 text-xs backdrop-blur">
+    SPZ: <span className="ml-1 font-semibold">{car.plate}</span>
+  </div>
                   </div>
                 </div>
 
                 <div className="p-5">
-                  <div className="grid grid-cols-2 gap-3">
-                    <Link
-                      href={`/vozidla/${car.id}`}
-                      className="inline-flex h-11 items-center justify-center rounded-xl border border-white/15 bg-white/5 px-4 text-sm font-semibold text-white hover:bg-white/10"
-                    >
-                      Detail
+                  <div className="flex items-center justify-between gap-3">
+                    <Link className="btn btn-ghost w-full" href={`/vozidla/${car.id}`}>
+                      Detail vozidla
                     </Link>
-                    <Link
-                      href={`/rezervace?carId=${car.id}`}
-                      className="inline-flex h-11 items-center justify-center rounded-xl bg-white px-4 text-sm font-semibold text-black hover:bg-zinc-200"
-                    >
+                    <Link className="btn btn-primary w-full" href={`/rezervace?carId=${car.id}`}>
                       Rezervovat
                     </Link>
                   </div>
@@ -72,6 +89,12 @@ export default async function VozidlaPage() {
             );
           })}
         </section>
+
+        <div className="mt-10 sm:hidden">
+          <Link className="btn btn-primary w-full" href="/rezervace">
+            Přejít na rezervaci
+          </Link>
+        </div>
       </main>
     </div>
   );
